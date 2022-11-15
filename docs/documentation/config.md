@@ -2,19 +2,28 @@
 
 #### Code
 
-```py
-import vscode
-from vscode.config import Config
+[//]: # (```py)
 
-c = Config(name='Say', description='Say Something!', input_type=str, default="Hello World!")
-ext = vscode.Extension('speaker','Speaker', '0.0.1', config=[c])
+[//]: # (import vscode)
 
-@ext.command()
-def message_say_config():
-    vscode.window.show_info_message(ext.get_config('Say') or c.default)
+[//]: # (from vscode.config import Config)
 
-vscode.build(ext)
-```
+[//]: # ()
+[//]: # (c = Config&#40;name='Say', description='Say Something!', input_type=str, default="Hello World!"&#41;)
+
+[//]: # (ext = vscode.Extension&#40;'speaker','Speaker', '0.0.1', config=[c]&#41;)
+
+[//]: # ()
+[//]: # (@ext.command&#40;&#41;)
+
+[//]: # (def message_say_config&#40;&#41;:)
+
+[//]: # (    vscode.window.show_info_message&#40;ext.get_config&#40;'Say'&#41; or c.default&#41;)
+
+[//]: # ()
+[//]: # (vscode.build&#40;ext&#41;)
+
+[//]: # (```)
 
 #### Result
 
@@ -22,4 +31,4 @@ vscode.build(ext)
 
 # Workspace Configurations
 
-::: vscode.config
+[//]: # (::: vscode.config)
