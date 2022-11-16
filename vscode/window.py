@@ -100,7 +100,11 @@ class TextEditor:
         pass
 
     async def show(self, column: ViewColumn):
-        pass
+        await self.ws.run_code(
+            f"vscode.window.activeTextEditor.show({column})",
+            wait_for_response=False,
+            thenable=False
+        )
 
 
 @dataclass
@@ -129,26 +133,57 @@ class TextDocument:
             "editor.document.getText(range);"
         return await self.ws.run_code(code, thenable=False)
 
-    async def get_word_range_at_position(self, position: Position, regex) -> Range:
-        pass
+    async def get_word_range_at_position(self, position: Position, regex = "") -> Range:
+        return await self.ws.run_code(
+            self._editor_code + \
+            f"let position = new vscode.Position({position.line}, {position.character});" + \
+            f"editor.document.getWordRangeAtPosition(position, {regex});",
+            thenable=False
+        )
 
-    async def line_at(self, line_or_position: Union[int, Position]) -> TextLine:
-        pass
+    async def line_at(self, line_or_position: int) -> TextLine:
+        return await self.ws.run_code(
+            self._editor_code +  f"editor.document.lineAt({line_or_position});",
+            thenable=False
+        )
 
     async def offset_at(self, position: Position) -> TextLine:
-        pass
+        return await self.ws.run_code(
+            self._editor_code + \
+            f"let position = new vscode.Position({position.line}, {position.character});" + \
+            "editor.document.offsetAt(position);",
+            thenable=False
+        )
 
     async def position_at(self, offset: int) -> Position:
-        pass
+        return await self.ws.run_code(
+            self._editor_code + \
+            f"editor.document.positionAt({offset});",
+            thenable=False
+        )
 
-    async def save(self):
-        pass
+    async def save(self) -> bool:
+        return await self.ws.run_code(
+            self._editor_code + "editor.document.save()"
+        )
 
     async def validate_position(self, position: Position) -> Position:
-        pass
+        return await self.ws.run_code(
+            self._editor_code + \
+            f"let position = new vscode.Position({position.line}, {position.character});" + \
+            "editor.document.validatePosition(position);",
+            thenable=False
+        )
 
     async def validate_range(self, range: Range) -> Range:
-        pass
+        s = range.start
+        e = range.end
+        return await self.ws.run_code(
+            self._editor_code + \
+            f"let range = new vscode.Range({s.line}, {s.character}, {e.line}, {e.character});" + \
+            "editor.document.validateRange(range);",
+            thenable=False
+        )
 
 
 class Terminal:
